@@ -1,4 +1,4 @@
-resource_group_name = "rg"
+resource_group_name = "app_grp"
 location            = "North Europe"
 vm_name             = "neumann_vm01"
 admin_username      = "fleq8s"
