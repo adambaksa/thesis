@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        // Az Azure hitelesítési adatok Jenkins környezeti változóként való beállítása
+        ARM_CLIENT_ID = credentials('383dcc0f-3f11-44c1-8b29-032f7f25ad7a')
+        ARM_CLIENT_SECRET = credentials('~ec8Q~Er1LCv_8nKZZDqmS-tFV~-bi.3x_r.rbq7')
+        ARM_SUBSCRIPTION_ID = credentials('bf9b83d8-67d1-4691-9cb8-3de759b0fa86')
+        ARM_TENANT_ID = credentials('e70d904c-182f-4d56-9452-4421819e0ff3')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // A Terraform kód beolvasása a Git repository-ból
+                checkout scm
+            }
+        }
+        
+        stage('Terraform Init') {
+            steps {
+                script {
+                    // Terraform inicializálása
+                    sh 'terraform init'
+                }
+            }
+        }
+        
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    // Terraform terv létrehozása
+                    sh 'terraform plan'
+                }
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    // Terraform alkalmazása (VM létrehozása)
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Itt adhatsz meg teendőket, mint például a takarítási lépéseket
+        }
+    }
+}
